@@ -1,0 +1,209 @@
+{
+  "active": false,
+  "connections": {
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Email Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GetMessages": {
+      "ai_tool": [
+        [
+          {
+            "node": "Email Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SendGmail": {
+      "ai_tool": [
+        [
+          {
+            "node": "Email Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Email Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email Agent": {
+      "main": [
+        [
+          {
+            "node": "Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-06-25T07:23:24.099Z",
+  "id": "yMAIDt6rGvwQ1gtQ",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Email Agent Demo",
+  "nodes": [
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        240
+      ],
+      "id": "96eecb6e-8dc3-4172-9061-bea227bf0b10",
+      "name": "OpenAI Chat Model1",
+      "credentials": {
+        "openAiApi": {
+          "id": "E5vy6clQF8bAXdVE",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.query }}",
+        "options": {
+          "systemMessage": "\nYOU ARE AN EMAIL-ACTION AGENT OPERATING INSIDE GMAIL. YOUR TASK IS TO AUTOMATICALLY SIGN OFF **ALL EMAILS COMPOSED BY \"YUSRA MASOOD\"** BY APPENDING A REAL, FULLY WRITTEN SIGNATURE TO THE END OF THE MESSAGE. YOU MUST NEVER USE PLACEHOLDERS.\n\n###INSTRUCTIONS###\n\n- APPEND THE FOLLOWING SIGNATURE TO THE BOTTOM OF THE EMAIL **UNLESS ONE ALREADY EXISTS**:   Yusra Masood\n\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        0,
+        -40
+      ],
+      "id": "c38d2c3e-f390-42d9-8eed-e60f2370fe5f",
+      "name": "Email Agent"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "limit": "={{ $fromAI(\"limit\") }}",
+        "simple": false,
+        "filters": {
+          "sender": "={{ $fromAI(\"senderEmail\") }}"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.1,
+      "position": [
+        260,
+        180
+      ],
+      "id": "99dfda56-d339-4cdb-8c16-0959ff94a127",
+      "name": "GetMessages",
+      "webhookId": "73a7a395-a2cc-423b-ab60-28ab4034901a",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "M59GPK1rOKy2lY3c",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $fromAI(\"emailAddress\", \"the email address you are sending to\") }}",
+        "subject": "={{ $fromAI(\"subject\") }}",
+        "emailType": "text",
+        "message": "={{ $fromAI(\"emailBody\") }}",
+        "options": {
+          "appendAttribution": false,
+          "senderName": "Yusra"
+        }
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.1,
+      "position": [
+        160,
+        180
+      ],
+      "id": "4870762b-6072-47d5-a4b1-f87b352d075f",
+      "name": "SendGmail",
+      "webhookId": "97371513-b9c6-4b0a-a50b-d8f277995930",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "M59GPK1rOKy2lY3c",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -200,
+        -40
+      ],
+      "id": "b83d63a1-05d1-48fd-8bd1-f86aeb4d5e17",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "bee5c909-855e-4853-908a-30ca73f6833c",
+              "name": "response",
+              "value": "={{ $json.output }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        360,
+        -40
+      ],
+      "id": "6ee085e2-50fb-4ae5-a4b0-f59007550287",
+      "name": "Response"
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-06-25T09:24:18.000Z",
+  "versionId": "c9c97736-b07c-480c-a60a-8f1f413652ec"
+}
