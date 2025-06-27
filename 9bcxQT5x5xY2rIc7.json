@@ -1,0 +1,109 @@
+{
+  "active": false,
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-06-20T06:38:14.248Z",
+  "id": "9bcxQT5x5xY2rIc7",
+  "isArchived": false,
+  "meta": {
+    "templateId": "self-building-ai-agent",
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Demo: My first AI Agent in n8n",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "b24b05a7-d802-4413-bfb1-23e1e76f6203",
+      "name": "When chat message received",
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        360,
+        20
+      ],
+      "webhookId": "a889d2ae-2159-402f-b326-5f61e90f602e"
+    },
+    {
+      "parameters": {
+        "content": "## Start by saying 'hi'\n![Button](https://i.imgur.com/PrIBJI6.png)",
+        "height": 149,
+        "width": 150
+      },
+      "id": "5592c045-6718-4c4e-9961-ce67a251b6df",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        180,
+        -40
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "d5e60eb2-267c-4f68-aefe-439031bcaceb",
+      "name": "OpenAI Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1,
+      "position": [
+        500,
+        240
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "E5vy6clQF8bAXdVE",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "=when query is related to a person you have to use wikipedia to get the results.\n"
+        }
+      },
+      "id": "41174c8a-6ac8-42bd-900e-ca15196600c5",
+      "name": "Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        580,
+        20
+      ]
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-06-20T06:53:05.000Z",
+  "versionId": "f669a6ec-2f97-4989-9dd1-496fc35b6bee"
+}
