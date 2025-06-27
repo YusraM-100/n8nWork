@@ -1,0 +1,293 @@
+{
+  "active": false,
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "Outline Writer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Outline Writer",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Outline Writer": {
+      "main": [
+        [
+          {
+            "node": "Outline Evaluation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Outline Evaluation",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Outline Evaluation": {
+      "main": [
+        [
+          {
+            "node": "Blog Writer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Blog Writer",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Blog Writer": {
+      "main": [
+        [
+          {
+            "node": "Google Docs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Docs": {
+      "main": [
+        [
+          {
+            "node": "Google Docs1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-06-23T09:40:39.339Z",
+  "id": "9Am86ItHaZ9BsW07",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Prompt chaining",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -340,
+        -60
+      ],
+      "id": "edd7f9f9-dc87-4ee1-b0d6-58ba1b32d34b",
+      "name": "When chat message received",
+      "webhookId": "e52a841c-afc3-48c4-a07f-c6833a0e670d"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=give all the information available on net for the topic \"{{ $json.chatInput }} \" in detail.",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        -120,
+        -60
+      ],
+      "id": "393a234b-29be-481e-a54b-57a0fb6b5b88",
+      "name": "Outline Writer"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -140,
+        160
+      ],
+      "id": "8de64a2b-2389-4f17-81d5-70d54fcb5305",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "E5vy6clQF8bAXdVE",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Use the text \"{{ $json.output }}\" and create ouline on important points. The outline shall be steps and it shall be strictly focused to the main topic \"{{ $('When chat message received').item.json.chatInput }}\". ANy information other than that of the topic shall be removed.",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        200,
+        -60
+      ],
+      "id": "6cfc50d6-10db-4a19-b74a-2bf24cc9d5a6",
+      "name": "Outline Evaluation"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        180,
+        140
+      ],
+      "id": "e85e7a02-3443-410c-82c5-d849ab22b65b",
+      "name": "OpenAI Chat Model1",
+      "credentials": {
+        "openAiApi": {
+          "id": "E5vy6clQF8bAXdVE",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Write a well presented blog on the topic {{ $('When chat message received').item.json.chatInput }} using the outline given as {{ $json.output }}. The blog shall be interesting and explained well.",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "You are a professional blog writer. Your job is to writer user inspiring blog for blog writer with section titles and key point explanations."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        520,
+        -60
+      ],
+      "id": "038d4df1-8c27-488c-862e-46bdbe4b4f58",
+      "name": "Blog Writer"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        520,
+        140
+      ],
+      "id": "4b59df3e-f693-4809-bc0c-1e97630f3b64",
+      "name": "OpenAI Chat Model2",
+      "credentials": {
+        "openAiApi": {
+          "id": "E5vy6clQF8bAXdVE",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "folderId": "1CrcazfSgYHydrvMjk3OWmL4sGzkHaMTU",
+        "title": "=The blog on {{ $('When chat message received').item.json.chatInput }}"
+      },
+      "type": "n8n-nodes-base.googleDocs",
+      "typeVersion": 2,
+      "position": [
+        840,
+        -220
+      ],
+      "id": "e0dbedd9-e266-4bd2-9f95-df71314d8f76",
+      "name": "Google Docs",
+      "credentials": {
+        "googleDocsOAuth2Api": {
+          "id": "02eYCic7Z2Wo4EAv",
+          "name": "Google Docs account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentURL": "={{ $json.id }}",
+        "actionsUi": {
+          "actionFields": [
+            {
+              "action": "insert",
+              "text": "={{ $('Blog Writer').item.json.output }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.googleDocs",
+      "typeVersion": 2,
+      "position": [
+        980,
+        -40
+      ],
+      "id": "d2309ff7-4fef-4da1-a230-8ef673006c55",
+      "name": "Google Docs1",
+      "credentials": {
+        "googleDocsOAuth2Api": {
+          "id": "02eYCic7Z2Wo4EAv",
+          "name": "Google Docs account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-06-23T10:15:38.000Z",
+  "versionId": "d27ed7fb-e9d5-4c06-8e51-1784caad69b4"
+}
