@@ -1,0 +1,392 @@
+{
+  "active": true,
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "Intent Agent",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Emotional Agent",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Bias Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Bias Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Intent Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Emotional Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Emotional Agent": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Intent Agent": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Bias Agent": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge1": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "Final Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Final Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Final Agent": {
+      "main": [
+        [
+          {
+            "node": "Google Docs1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Docs": {
+      "main": [
+        []
+      ]
+    },
+    "Google Docs1": {
+      "main": [
+        [
+          {
+            "node": "Google Docs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-06-23T11:09:24.464Z",
+  "id": "0bp1lZnYY1Hd6RBM",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Parallelization Work Flow",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -340,
+        -60
+      ],
+      "id": "d9ebc1ff-53f5-44db-8ad6-9879835db332",
+      "name": "When chat message received",
+      "webhookId": "eaebed58-71f1-4473-bccb-25dc58554edc"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "Analyze the emotional tone of the incoming text. Categorize it as positive, negative, neutral or mixed. Provide a brief explanation "
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        -100,
+        -200
+      ],
+      "id": "4406d183-2aa1-4c03-9f5c-b1b41a80f3e5",
+      "name": "Emotional Agent"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "Analyze the intent behind this message. Classify it as informational, persuasive, aggressive or neutral. Provide reasoning."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        -100,
+        -20
+      ],
+      "id": "1779fec4-817e-45b1-92ad-112fc7288141",
+      "name": "Intent Agent"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "Analyze the text for potential biases. Identify if it exhibits political, racial, gender or other biases. Suggest ways to make it more neutral."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        -100,
+        160
+      ],
+      "id": "5d48b54e-9d48-415b-889c-2e6f52490349",
+      "name": "Bias Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -360,
+        420
+      ],
+      "id": "a1b9b9b7-0d0c-428c-8b8c-e191421936ca",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "E5vy6clQF8bAXdVE",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        360,
+        -140
+      ],
+      "id": "138d9f90-e0a0-4bcd-b248-aeaa54b889e8",
+      "name": "Merge"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        600,
+        40
+      ],
+      "id": "539727d7-6f39-4d43-a349-2b0ab63c2157",
+      "name": "Merge1"
+    },
+    {
+      "parameters": {
+        "fieldsToAggregate": {
+          "fieldToAggregate": [
+            {
+              "fieldToAggregate": "={{ $json.output }}",
+              "renameField": true,
+              "outputFieldName": "out1"
+            },
+            {
+              "fieldToAggregate": "={{ $('Merge').item.json.output }}",
+              "renameField": true,
+              "outputFieldName": "out2"
+            }
+          ]
+        },
+        "options": {
+          "mergeLists": true
+        }
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        820,
+        40
+      ],
+      "id": "3cd1e5ab-c9e3-4b9e-8580-603c57f6171c",
+      "name": "Aggregate"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=use the data below as {{ $json.out1 }} and {{ $json.out2 }} to generate a report on input message{{ $('When chat message received').item.json.chatInput }} on the criterias of biasness , emotional values and intent agent",
+        "options": {
+          "systemMessage": "Combine all the inputs and write a report based upon the input."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        1040,
+        40
+      ],
+      "id": "3f967950-da83-4d97-834e-bbd5a185f1d7",
+      "name": "Final Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        1060,
+        280
+      ],
+      "id": "76b81fa8-aa04-47d9-84bd-5b1bfc9effc6",
+      "name": "OpenAI Chat Model1",
+      "credentials": {
+        "openAiApi": {
+          "id": "E5vy6clQF8bAXdVE",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentURL": "={{ $json.id }}",
+        "actionsUi": {
+          "actionFields": [
+            {
+              "action": "insert",
+              "text": "={{ $('Final Agent').item.json.output }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.googleDocs",
+      "typeVersion": 2,
+      "position": [
+        1740,
+        40
+      ],
+      "id": "025e503c-c613-4124-b511-a9d6f1a1e943",
+      "name": "Google Docs",
+      "credentials": {
+        "googleDocsOAuth2Api": {
+          "id": "02eYCic7Z2Wo4EAv",
+          "name": "Google Docs account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "folderId": "1CrcazfSgYHydrvMjk3OWmL4sGzkHaMTU",
+        "title": "Parallelization demo"
+      },
+      "type": "n8n-nodes-base.googleDocs",
+      "typeVersion": 2,
+      "position": [
+        1460,
+        40
+      ],
+      "id": "b54f42c6-c13b-4f56-a565-262534a65f63",
+      "name": "Google Docs1",
+      "credentials": {
+        "googleDocsOAuth2Api": {
+          "id": "02eYCic7Z2Wo4EAv",
+          "name": "Google Docs account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2025-06-27T09:37:52.000Z",
+  "versionId": "6f2565f7-3fc7-46c6-8481-3c6dd34c784e"
+}
