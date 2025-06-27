@@ -1,0 +1,142 @@
+{
+  "active": false,
+  "connections": {
+    "Error Trigger": {
+      "main": [
+        [
+          {
+            "node": "Log Error",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Notification",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-06-27T09:05:31.591Z",
+  "id": "6CLbsNylHh7h33dd",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "ErrorLog",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        740,
+        200
+      ],
+      "id": "b14ebccb-5cec-4f7a-a38f-ed56dec8a0d8",
+      "name": "Error Trigger"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1kQc35LQZ5ifHOo1tZYRgdoQNaP4ykLPxeB6Pv6wOzxY",
+          "mode": "list",
+          "cachedResultName": "Error_Log",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1kQc35LQZ5ifHOo1tZYRgdoQNaP4ykLPxeB6Pv6wOzxY/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1kQc35LQZ5ifHOo1tZYRgdoQNaP4ykLPxeB6Pv6wOzxY/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "execution",
+              "displayName": "execution",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "workflow",
+              "displayName": "workflow",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        1080,
+        60
+      ],
+      "id": "8ccbdf45-65af-4159-b050-5445676de6a7",
+      "name": "Log Error",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "y02R1gShIb2Uaasg",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "#all-n8nworkspace",
+          "mode": "name"
+        },
+        "text": "=Workflow Error: {{ $json.workflow.name }}\n\n{{ $json.execution.error.node.name }} errored at {{ $now.format('yyyy-MM-dd hh:mma') }}.\n\nThe error message was: {{ $json.execution.error.message }}\n\nSee this execution here: {{ $json.execution.url }}",
+        "otherOptions": {
+          "includeLinkToWorkflow": false
+        }
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        1080,
+        380
+      ],
+      "id": "5b7a9bf5-f39d-40a4-9e55-b5ae650f7d0c",
+      "name": "Notification",
+      "webhookId": "f7ea0908-8d52-4f41-863f-b2befd4991f8",
+      "credentials": {
+        "slackApi": {
+          "id": "fxiiGyXNpLuRXlDA",
+          "name": "Slack account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-06-27T09:17:36.000Z",
+  "versionId": "87229b89-07a8-4fb8-bf38-143fddca3d8c"
+}
