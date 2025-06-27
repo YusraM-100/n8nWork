@@ -1,0 +1,142 @@
+{
+  "active": false,
+  "connections": {
+    "Gmail Trigger": {
+      "main": [
+        [
+          {
+            "node": "Text Classifier",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Text Classifier",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-06-23T05:04:09.032Z",
+  "id": "dItVv73Uj1QNUho3",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Gmail- Classifier",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "filters": {
+          "includeSpamTrash": true
+        }
+      },
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        120,
+        20
+      ],
+      "id": "b694a566-7634-411a-ad28-bb02e18dcf11",
+      "name": "Gmail Trigger",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "M59GPK1rOKy2lY3c",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "options": {
+          "responseFormat": "text",
+          "temperature": 0.5
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        720,
+        260
+      ],
+      "id": "ce31c146-5157-4cec-9ccc-73b981a87a57",
+      "name": "OpenAI Chat Model",
+      "notesInFlow": true,
+      "credentials": {
+        "openAiApi": {
+          "id": "E5vy6clQF8bAXdVE",
+          "name": "OpenAi account"
+        }
+      },
+      "notes": "do not use code characters in the final output. give the output in a friendly and professional way using emojis."
+    },
+    {
+      "parameters": {
+        "inputText": "={{ $json.snippet }}",
+        "categories": {
+          "categories": [
+            {
+              "category": "promotion",
+              "description": "containing phrases such as promotion , discount "
+            },
+            {
+              "category": "Password Management ",
+              "description": "phrases such as update password , change password , forgot password"
+            },
+            {
+              "category": "Security Settings",
+              "description": "phrases such as pin verification ,  2 step verification "
+            },
+            {
+              "category": "Educational",
+              "description": "phrases like courses, platforms , learning , good education"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.textClassifier",
+      "typeVersion": 1.1,
+      "position": [
+        700,
+        40
+      ],
+      "id": "46c39a13-68cb-4f0e-b45f-bd2a2e0be2d2",
+      "name": "Text Classifier"
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": {
+    "node:Gmail Trigger": {
+      "Gmail Trigger": {
+        "lastTimeChecked": 1750670632
+      }
+    }
+  },
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2025-06-23T09:40:05.000Z",
+  "versionId": "539a7f88-79a6-4d2c-8331-023e11eb00fe"
+}
